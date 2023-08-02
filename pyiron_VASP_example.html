@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyiron example notebook &#8212; pyiron_vasp_example</title>
+    <title>Running a VASP job in pyiron &#8212; pyiron_vasp_example</title>
   
   
   
@@ -60,7 +60,7 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'example';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pyiron_VASP_example';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="pyiron workflow template" href="README.html" />
@@ -155,7 +155,7 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">pyiron example notebook</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Running a VASP job in pyiron</a></li>
 </ul>
 
     </div>
@@ -210,7 +210,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://mybinder.org/v2/gh/materialdigital/pyiron_vasp_example/master?urlpath=lab/tree/example.ipynb" target="_blank"
+      <li><a href="https://mybinder.org/v2/gh/materialdigital/pyiron_vasp_example/master?urlpath=lab/tree/pyiron_VASP_example.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
    title="Launch onBinder"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -241,7 +241,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/example.ipynb" target="_blank"
+      <li><a href="_sources/pyiron_VASP_example.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -310,7 +310,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -321,11 +323,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>pyiron example notebook</h1>
+    <h1>Running a VASP job in pyiron</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-job-output">Accessing job output</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -335,31 +345,84 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="pyiron-example-notebook">
-<h1>pyiron example notebook<a class="headerlink" href="#pyiron-example-notebook" title="Permalink to this headline">#</a></h1>
-<p>This is an example notebook to demonstrate the functionality of the publication template. The notebook loads an existing Si calculation and calculates the total energy using LAMMPS and the quip potential provided as additional resource in this repository.</p>
-<p>The calculation archive was created using the following commands:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyiron_atomistics</span> <span class="kn">import</span> <span class="n">Project</span>
-<span class="n">pr</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="s2">&quot;old_calculation&quot;</span><span class="p">)</span>
-<span class="n">job</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">Lammps</span><span class="p">(</span><span class="n">job_name</span><span class="o">=</span><span class="s2">&quot;lmp_si&quot;</span><span class="p">)</span>
-<span class="n">job</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">ase</span><span class="o">.</span><span class="n">bulk</span><span class="p">(</span><span class="s2">&quot;Si&quot;</span><span class="p">)</span>
-<span class="n">job</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<span class="n">pr</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">destination_path</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The pyiron project class is imported using:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="running-a-vasp-job-in-pyiron">
+<h1>Running a VASP job in pyiron<a class="headerlink" href="#running-a-vasp-job-in-pyiron" title="Permalink to this headline">#</a></h1>
+<p>Important: This assumes that you will have configured VASP already - this notebook <em>doesn’t</em> work out of the box</p>
+<p>If you haven’t, configure here:</p>
+<p><a class="reference external" href="https://pyiron.readthedocs.io/en/latest/source/installation.html">https://pyiron.readthedocs.io/en/latest/source/installation.html</a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyiron_atomistics</span> <span class="kn">import</span> <span class="n">Project</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyiron.project</span> <span class="kn">import</span> <span class="n">Project</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a3a76186116144099ca4bd6770f97944", "version_major": 2, "version_minor": 0}</script></div>
 </div>
-<p>To validate the previous calculation have been successfully imported:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr_data</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="s2">&quot;pyiron/calculation&quot;</span><span class="p">)</span>
-<span class="n">pr_data</span><span class="o">.</span><span class="n">job_table</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="s2">&quot;run_vasp_calc&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">structure</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">structure</span><span class="o">.</span><span class="n">ase</span><span class="o">.</span><span class="n">bulk</span><span class="p">(</span><span class="s2">&quot;Fe&quot;</span><span class="p">,</span><span class="n">crystalstructure</span><span class="o">=</span><span class="s2">&quot;bcc&quot;</span><span class="p">,</span> <span class="n">cubic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">*</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">structure</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>16
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">create_job</span><span class="p">(</span><span class="n">job_type</span><span class="o">=</span><span class="n">pr</span><span class="o">.</span><span class="n">job_type</span><span class="o">.</span><span class="n">Vasp</span><span class="p">,</span> <span class="n">job_name</span> <span class="o">=</span> <span class="s2">&quot;bcc_Fe_16_atoms&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set the structure</span>
+<span class="n">job</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">structure</span>
+
+<span class="c1"># Set gamma-centered mesh of 2, 2, 2 subdivisions</span>
+<span class="n">job</span><span class="o">.</span><span class="n">set_kpoints</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">scheme</span> <span class="o">=</span> <span class="s2">&quot;GC&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set/adjust incar flags</span>
+<span class="n">job</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">incar</span><span class="p">[</span><span class="s1">&#39;EDIFF&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1E-7</span>
+<span class="n">job</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">incar</span><span class="p">[</span><span class="s1">&#39;EDIFFG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1E-2</span>
+
+<span class="c1"># Set your queue that you already configured in installation (queue.yaml)</span>
+<span class="n">job</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="s2">&quot;cmti&quot;</span>
+<span class="n">job</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">cores</span> <span class="o">=</span> <span class="mi">40</span>
+<span class="n">job</span><span class="o">.</span><span class="n">executable</span> <span class="o">=</span> <span class="s2">&quot;5.4.4_mpi&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">run_mode</span><span class="o">=</span><span class="s2">&quot;queue&quot;</span><span class="p">,</span> <span class="n">delete_existing_job</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job bcc_Fe_16_atoms was saved and received the ID: 20407761
+Queue system id:  5874931
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr</span><span class="o">.</span><span class="n">job_table</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -402,19 +465,19 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>1</td>
-      <td>finished</td>
-      <td>Si2</td>
-      <td>lmp_si</td>
-      <td>/lmp_si</td>
-      <td>/home/jovyan/</td>
-      <td>calculation/old_calculation/</td>
-      <td>2021-03-19 16:21:40.376046</td>
-      <td>2021-03-19 16:21:41.573096</td>
-      <td>1.0</td>
-      <td>pyiron@MacBook-Pro.local#1</td>
-      <td>Lammps</td>
-      <td>0.1</td>
+      <td>20407761</td>
+      <td>submitted</td>
+      <td>Fe16</td>
+      <td>bcc_Fe_16_atoms</td>
+      <td>/bcc_Fe_16_atoms</td>
+      <td>/cmmc/u/</td>
+      <td>hmai/MaterialDigital/run_vasp_calc/</td>
+      <td>2023-07-31 12:59:07.119963</td>
+      <td>None</td>
+      <td>None</td>
+      <td>hmai@cmti001#40#cmti</td>
+      <td>Vasp</td>
+      <td>5.4.4_mpi</td>
       <td>None</td>
       <td>None</td>
     </tr>
@@ -422,191 +485,111 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<p>Reload the existing calculation to continue with the previous structure:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job_reload</span> <span class="o">=</span> <span class="n">pr_data</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;lmp_si&quot;</span><span class="p">)</span>
-<span class="n">structure_reload</span> <span class="o">=</span> <span class="n">job_reload</span><span class="o">.</span><span class="n">get_structure</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Create a new LAMMPS job object and assign the structure from the previous calculation:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr_new</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="s2">&quot;new_calculation&quot;</span><span class="p">)</span>
-<span class="n">job</span> <span class="o">=</span> <span class="n">pr_new</span><span class="o">.</span><span class="n">create</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">Lammps</span><span class="p">(</span><span class="n">job_name</span><span class="o">=</span><span class="s2">&quot;lmp_quip&quot;</span><span class="p">)</span>
-<span class="n">job</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">structure_reload</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>List all available interatomic potentials:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="o">.</span><span class="n">view_potentials</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">energy_tot</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Config</th>
-      <th>Filename</th>
-      <th>Model</th>
-      <th>Name</th>
-      <th>Species</th>
-      <th>Citations</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>[pair_style quip\n, pair_coeff * * sw_example.xml "IP SW" 14\n]</td>
-      <td>[quip/sw_example.xml, quip/data_sw]</td>
-      <td>QUIP</td>
-      <td>Si-quip-xml</td>
-      <td>[Si]</td>
-      <td>{}</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>[pair_style sw\n, pair_coeff * * Si.sw Si\n]</td>
-      <td>[potential_LAMMPS/1985--Stillinger-F-H--Si--LAMMPS--ipr1/Si.sw]</td>
-      <td>NISTiprpy</td>
-      <td>1985--Stillinger-F-H--Si--LAMMPS--ipr1</td>
-      <td>[Si]</td>
-      <td>[{'Stillinger_1985': {'title': 'Computer simulation of local order in condensed phases of silicon', 'journal': 'Physical Review B', 'volume': '31', 'pages': '5262--5271', 'number': '8', 'doi': '10...</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>[pair_style tersoff\n, pair_coeff * * 1988_Si(B).tersoff Si\n]</td>
-      <td>[potential_LAMMPS/1988--Tersoff-J--Si-b--LAMMPS--ipr1/1988_Si(B).tersoff]</td>
-      <td>NISTiprpy</td>
-      <td>1988--Tersoff-J--Si-b--LAMMPS--ipr1</td>
-      <td>[Si]</td>
-      <td>[{'Tersoff_1988': {'title': 'New empirical approach for the structure and energy of covalent systems', 'journal': 'Physical Review B', 'volume': '37', 'pages': '6991--7000', 'number': '12', 'doi':...</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>[pair_style tersoff\n, pair_coeff * * 1988_Si(C).tersoff Si\n]</td>
-      <td>[potential_LAMMPS/1988--Tersoff-J--Si-c--LAMMPS--ipr1/1988_Si(C).tersoff]</td>
-      <td>NISTiprpy</td>
-      <td>1988--Tersoff-J--Si-c--LAMMPS--ipr1</td>
-      <td>[Si]</td>
-      <td>[{'Tersoff_1988': {'title': 'Empirical interatomic potential for silicon with improved elastic properties', 'journal': 'Physical Review B', 'volume': '38', 'pages': '9902--9905', 'number': '14', '...</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>[pair_style tersoff\n, pair_coeff * * 1989_SiC.tersoff Si C\n]</td>
-      <td>[potential_LAMMPS/1989--Tersoff-J--Si-C--LAMMPS--ipr1/1989_SiC.tersoff]</td>
-      <td>NISTiprpy</td>
-      <td>1989--Tersoff-J--Si-C--LAMMPS--ipr1</td>
-      <td>[Si, C]</td>
-      <td>[{'Tersoff_1989': {'title': 'Modeling solid-state chemistry: Interatomic potentials for multicomponent systems', 'journal': 'Physical Review B', 'volume': '39', 'pages': '5566--5568', 'number': '8...</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>917</th>
-      <td>[pair_style kim Sim_LAMMPS_TersoffZBL_DevanathanDiazdelaRubiaWeber_1998_SiC__SM_578912636995_000\n, pair_coeff * * Si C\n]</td>
-      <td>[]</td>
-      <td>OPENKIM</td>
-      <td>Sim_LAMMPS_TersoffZBL_DevanathanDiazdelaRubiaWeber_1998_SiC__SM_578912636995_000</td>
-      <td>[Si, C]</td>
-      <td>[{'R._1998': {'title': 'Displacement threshold energies in β-SiC', 'volume': '253', 'year': '1998', 'journal': 'Journal of Nuclear Materials', 'doi': '10.1016/S0022-3115(97)00304-8', 'author': ['D...</td>
-    </tr>
-    <tr>
-      <th>920</th>
-      <td>[pair_style kim Sim_LAMMPS_Vashishta_BroughtonMeliVashishta_1997_SiO__SM_422553794879_000\n, pair_coeff * * Si O\n]</td>
-      <td>[]</td>
-      <td>OPENKIM</td>
-      <td>Sim_LAMMPS_Vashishta_BroughtonMeliVashishta_1997_SiO__SM_422553794879_000</td>
-      <td>[Si, O]</td>
-      <td>[{'Q._1997': {'title': 'Direct atomistic simulation of quartz crystal oscillators: Bulk properties and nanoscale devices', 'volume': '56', 'year': '1997', 'journal': 'Physical Review B', 'doi': '1...</td>
-    </tr>
-    <tr>
-      <th>921</th>
-      <td>[pair_style kim Sim_LAMMPS_Vashishta_NakanoKaliaVashishta_1994_SiO__SM_503555646986_000\n, pair_coeff * * Si O\n]</td>
-      <td>[]</td>
-      <td>OPENKIM</td>
-      <td>Sim_LAMMPS_Vashishta_NakanoKaliaVashishta_1994_SiO__SM_503555646986_000</td>
-      <td>[Si, O]</td>
-      <td>[{'Aiichiro_1994': {'title': 'First sharp diffraction peak and intermediate-range order in amorphous silica: finite-size effects in molecular dynamics simulations', 'volume': '171', 'year': '1994'...</td>
-    </tr>
-    <tr>
-      <th>922</th>
-      <td>[pair_style kim Sim_LAMMPS_Vashishta_VashishtaKaliaNakano_2007_SiC__SM_196548226654_000\n, pair_coeff * * Si C\n]</td>
-      <td>[]</td>
-      <td>OPENKIM</td>
-      <td>Sim_LAMMPS_Vashishta_VashishtaKaliaNakano_2007_SiC__SM_196548226654_000</td>
-      <td>[Si, C]</td>
-      <td>[{'Priya_2007': {'title': 'Interaction potential for silicon carbide: A molecular dynamics study of elastic constants and vibrational density of states for crystalline and amorphous silicon carbid...</td>
-    </tr>
-    <tr>
-      <th>923</th>
-      <td>[pair_style kim Sim_LAMMPS_Vashishta_VashishtaKaliaRino_1990_SiO__SM_887826436433_000\n, pair_coeff * * Si O\n]</td>
-      <td>[]</td>
-      <td>OPENKIM</td>
-      <td>Sim_LAMMPS_Vashishta_VashishtaKaliaRino_1990_SiO__SM_887826436433_000</td>
-      <td>[Si, O]</td>
-      <td>[{'P._1990': {'title': 'Interaction potential for {SiO}2: A molecular-dynamics study of structural correlations', 'volume': '41', 'year': '1990', 'journal': 'Physical Review B', 'doi': '10.1103/ph...</td>
-    </tr>
-  </tbody>
-</table>
-<p>77 rows × 6 columns</p>
-</div></div></div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-121.96485025])
+</pre></div>
 </div>
-<p>Select the LAMMPS quip potential provided in the resource directory and execute the calculation:</p>
+</div>
+</div>
+<section id="accessing-job-output">
+<h2>Accessing job output<a class="headerlink" href="#accessing-job-output" title="Permalink to this headline">#</a></h2>
+<p>If we want to look at the raw output files, we can!</p>
+<p>Access the stored output in the HDF5 file in “inspect” mode via calling</p>
+<p>job[“YOUR_OUTPUT_FILE”]</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="o">.</span><span class="n">potential</span> <span class="o">=</span> <span class="s2">&quot;Si-quip-xml&quot;</span>
-<span class="n">job</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="p">[</span><span class="s2">&quot;OUTCAR&quot;</span><span class="p">][:</span><span class="mi">20</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The job lmp_quip was saved and received the ID: 2
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39; vasp.5.4.4.18Apr17-6-g9f103f2a35 (build Feb 19 2020 16:12:31) complex          \n&#39;,
+ &#39;  \n&#39;,
+ &#39; executed on             LinuxIFC date 2023.07.31  14:03:57\n&#39;,
+ &#39; running on   40 total cores\n&#39;,
+ &#39; distrk:  each k-point on   40 cores,    1 groups\n&#39;,
+ &#39; distr:  one band on NCORES_PER_BAND=   1 cores,   40 groups\n&#39;,
+ &#39;\n&#39;,
+ &#39;\n&#39;,
+ &#39;--------------------------------------------------------------------------------------------------------\n&#39;,
+ &#39;\n&#39;,
+ &#39;\n&#39;,
+ &#39; INCAR:\n&#39;,
+ &#39; POTCAR:    PAW_PBE Fe 06Sep2000                  \n&#39;,
+ &#39;\n&#39;,
+ &#39; ----------------------------------------------------------------------------- \n&#39;,
+ &#39;|                                                                             |\n&#39;,
+ &#39;|           W    W    AA    RRRRR   N    N  II  N    N   GGGG   !!!           |\n&#39;,
+ &#39;|           W    W   A  A   R    R  NN   N  II  NN   N  G    G  !!!           |\n&#39;,
+ &#39;|           W    W  A    A  R    R  N N  N  II  N N  N  G       !!!           |\n&#39;,
+ &#39;|           W WW W  AAAAAA  RRRRR   N  N N  II  N  N N  G  GGG   !            |\n&#39;]
 </pre></div>
 </div>
 </div>
 </div>
-<p>Print the total energy of both calculation:</p>
+<p>We usually store the most important outputs in hdf5</p>
+<p>Access and navigate the stored information using the same syntax</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s2">&quot;output/generic/energy_tot&quot;</span><span class="p">],</span> <span class="n">job_reload</span><span class="p">[</span><span class="s2">&quot;output/generic/energy_tot&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-8.66999651] [-8.67319651]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;groups&#39;: [&#39;charge_density&#39;, &#39;electronic_structure&#39;, &#39;generic&#39;, &#39;outcar&#39;, &#39;structure&#39;], &#39;nodes&#39;: [&#39;description&#39;]}
 </pre></div>
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;output/generic/&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;groups&#39;: [&#39;dft&#39;], &#39;nodes&#39;: [&#39;cells&#39;, &#39;elastic_constants&#39;, &#39;energy_pot&#39;, &#39;energy_tot&#39;, &#39;forces&#39;, &#39;positions&#39;, &#39;pressures&#39;, &#39;steps&#39;, &#39;stresses&#39;, &#39;temperature&#39;, &#39;volume&#39;]}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s look at the energy_tot and forces</span>
+<span class="n">energy</span><span class="p">,</span> <span class="n">forces</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;output/generic/energy_tot&#39;</span><span class="p">],</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;output/generic/forces&#39;</span><span class="p">]</span>
+<span class="n">energy</span><span class="p">,</span> <span class="n">forces</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([-121.96485025]),
+ array([[[-0., -0.,  0.],
+         [-0., -0., -0.],
+         [ 0., -0., -0.],
+         [-0., -0., -0.],
+         [ 0.,  0.,  0.],
+         [-0.,  0.,  0.],
+         [ 0., -0.,  0.],
+         [ 0.,  0.,  0.],
+         [ 0.,  0.,  0.],
+         [-0.,  0., -0.],
+         [-0.,  0.,  0.],
+         [ 0.,  0.,  0.],
+         [-0., -0., -0.],
+         [-0., -0.,  0.],
+         [ 0., -0., -0.],
+         [ 0., -0., -0.]]]))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -658,6 +641,20 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-job-output">Accessing job output</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
