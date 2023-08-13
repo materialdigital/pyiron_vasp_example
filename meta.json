@@ -5,7 +5,10 @@
         "Han Mai <h.mai@mpie.de>"
     ],
     "description": "Run a VASP calculation in pyiron",
-    "release": "0.0.1",
+    "release": {
+        "latest_release_date": "e.g., 2023-08-14",
+        "latest_release_tag": "e.g., 0.0.1"
+    },
     "keywords": [
         "workflow",
         "VASP",
