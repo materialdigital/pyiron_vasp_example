@@ -12,17 +12,17 @@
     "keywords": [
         "workflow",
         "VASP",
-        "density functional theory",
+        "density functional theory"
     ],
     "categories":[
-        "category1, atomistics",
+        "category1, atomistics"
     ],
     "steps/codes":[
         "step1, e.g., basic VASP calculation",
-        "code1, e.g., VASP",
+        "code1, e.g., VASP"
     ],
     "license": {
-        "software1": "Academic License",
+        "software1": "Academic License"
     },
     "publication": [
         "Kresse, G. and Hafner, J., 1993. Ab initio molecular dynamics for liquid metals. Physical review B, 47(1), p.558."
