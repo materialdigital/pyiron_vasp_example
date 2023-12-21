@@ -5,10 +5,7 @@
         "Han Mai <h.mai@mpie.de>"
     ],
     "description": "Run a VASP calculation in pyiron",
-    "release": {
-        "latest_release_date": "e.g., 2023-08-14",
-        "latest_release_tag": "e.g., 0.0.1"
-    },
+    "release": "0.0.1",
     "keywords": [
         "workflow",
         "VASP",
@@ -22,9 +19,10 @@
         "code1, e.g., VASP"
     ],
     "license": {
-        "software1": "Academic License"
+        "software1": "GNU Public License Version 2"
     },
     "publication": [
+        "Janssen, J., Surendralal, S., Lysogorskiy, Y., Todorova, M., Hickel, T., Drautz, R. and Neugebauer, J., 2019. pyiron: An integrated development environment for computational materials science. Computational Materials Science, 163, pp.24-36.",
         "Kresse, G. and Hafner, J., 1993. Ab initio molecular dynamics for liquid metals. Physical review B, 47(1), p.558."
     ],
     "logo" : "logo_dark.png"
